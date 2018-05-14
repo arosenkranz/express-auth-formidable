@@ -59,7 +59,7 @@ module.exports = function (app) {
           email: fields.email,
           password: fields.password,
         }).then(function () {
-          res.json(true);
+          res.json("/login");
           // res.redirect(307, "/api/login");
         }).catch(function (err) {
           console.log(err);

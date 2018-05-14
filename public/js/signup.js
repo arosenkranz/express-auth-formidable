@@ -15,7 +15,7 @@ $(document).ready(function () {
     // append password to form (password: '12345')
     formData.append("password", passwordInput.val().trim());
 
-    if ($("#file-input").prop("files")[0], $("#file-input").prop("files")[0]) {
+    if ($("#file-input").prop("files")[0]) {
       // append photo information to form (photo: {objOfPhotoInfo})
       formData.append("photo", $("#file-input").prop("files")[0], $("#file-input").prop("files")[0].name);
     }
