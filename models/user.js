@@ -21,9 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     photo: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isUrl: true
-      }
+      defaultValue: "https://scontent.fewr1-3.fna.fbcdn.net/v/t31.0-8/906416_10103157316469369_986850834_o.jpg?_nc_cat=0&oh=ff1c6ad4081e24bae8e9cd57ced0b182&oe=5B8306B7"
     }
   });
   // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database

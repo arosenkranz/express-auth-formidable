@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Getting references to our form and input
   var signUpForm = $("form.signup");
   var emailInput = $("input#email-input");
   var passwordInput = $("input#password-input");
 
   // When the signup button is clicked, we validate the email and password are not blank
-  signUpForm.on("submit", function(event) {
+  signUpForm.on("submit", function (event) {
     event.preventDefault();
 
     // Use FormData constructor to build a new multipart form (for handling images)
@@ -14,9 +14,11 @@ $(document).ready(function() {
     formData.append("email", emailInput.val().trim());
     // append password to form (password: '12345')
     formData.append("password", passwordInput.val().trim());
-    // append photo information to form (photo: {objOfPhotoInfo})
-    formData.append("photo", $("#file-input").prop("files")[0], $("#file-input").prop("files")[0].name);
 
+    if ($("#file-input").prop("files")[0], $("#file-input").prop("files")[0]) {
+      // append photo information to form (photo: {objOfPhotoInfo})
+      formData.append("photo", $("#file-input").prop("files")[0], $("#file-input").prop("files")[0].name);
+    }
     console.log($("#file-input").prop("files"));
 
     // if (!userData.email || !userData.password) {
@@ -38,15 +40,16 @@ $(document).ready(function() {
       contentType: false,
       processData: false,
       method: 'POST',
-    }).then(function(data) {
+    }).then(function (data) {
       console.log(data);
-      window.location.replace(data);
+      window.location.replace(data)
       // If there's an error, handle it by throwing up a bootstrap alert
     }).catch(handleLoginErr);
   }
 
   function handleLoginErr(err) {
-    $("#alert .msg").text(err.responseJSON);
+    console.log(err);
+    $("#alert .msg").text(err);
     $("#alert").fadeIn(500);
   }
 });
