@@ -25,9 +25,17 @@ module.exports = function (app) {
     res.json("/members");
   });
 
-  // Route for signing up a user. The user's password is automatically hashed and stored securely thanks to
-  // how we configured our Sequelize User Model. If the user is created successfully, proceed to log the user in,
-  // otherwise send back an error
+
+
+  /*
+
+  Route for signing up a user. Since we are sending an image with the POST request, we cannot use body-parser since it cannot read the file's data, so we use Formidable instead. 
+
+  Once we parse out the form and extract the image's data, we send that image's data to Cloudinary. When it's done uploading there, it executes our callback function and includes all of the newly uploaded image's data so we can use that URL to store in the user's table.
+  
+  The user's password is automatically hashed and stored securely thanks to how we configured our Sequelize User Model. If the user is created successfully, proceed to log the user in, otherwise send back an error 
+  
+  */
   app.post("/api/signup", function (req, res) {
 
     // Create a new instance of formidable to handle the request info
@@ -38,6 +46,7 @@ module.exports = function (app) {
       console.log(fields);
       console.log(files.photo);
 
+      /* IF PHOTO/FILE EXISTS */
       if (files.photo) {
         // upload file to cloudinary, which'll return an object for the new image
         cloudinary.uploader.upload(files.photo.path, function (result) {
@@ -47,20 +56,35 @@ module.exports = function (app) {
             email: fields.email,
             password: fields.password,
             photo: result.secure_url
-          }).then(function () {
-            res.json("/login");
+          }).then(function (userInfo) {
+            // Upon successful signup, log user in
+            req.login(userInfo, function (err) {
+              if (err) {
+                console.log(err)
+                return res.json(err);
+              }
+              console.log(req.user);
+              return res.json("/members");
+            });
           }).catch(function (err) {
-            console.log(err);
-            res.json(err);
+            console.log(err)
+            return res.json(err);
           });
         });
+        /* IF NO PHOTO/FILE */
       } else {
         db.User.create({
           email: fields.email,
           password: fields.password,
         }).then(function () {
-          res.json("/login");
-          // res.redirect(307, "/api/login");
+         // Upon successful signup, log user in
+         req.login(userInfo, function (err) {
+           if (err) {
+             return next(err);
+           }
+           console.log(req.user);
+           return res.json("/members");
+         });
         }).catch(function (err) {
           console.log(err);
           res.json(err);
