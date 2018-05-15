@@ -61,14 +61,14 @@ module.exports = function (app) {
             req.login(userInfo, function (err) {
               if (err) {
                 console.log(err)
-                return res.json(err);
+                return res.status(422).json(err);
               }
               console.log(req.user);
-              return res.json("/members");
+              res.json("/members");
             });
           }).catch(function (err) {
             console.log(err)
-            return res.json(err);
+            res.status(422).json(err);
           });
         });
         /* IF NO PHOTO/FILE */
@@ -80,15 +80,15 @@ module.exports = function (app) {
          // Upon successful signup, log user in
          req.login(userInfo, function (err) {
            if (err) {
-             return next(err);
+             console.log(err)
+             return res.status(422).json(err);
            }
            console.log(req.user);
            return res.json("/members");
          });
         }).catch(function (err) {
           console.log(err);
-          res.json(err);
-          // res.status(422).json(err.errors[0].message);
+          res.status(422).json(err);
         });
       }
     });
