@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     photo: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: "https://scontent.fewr1-3.fna.fbcdn.net/v/t31.0-8/906416_10103157316469369_986850834_o.jpg?_nc_cat=0&oh=ff1c6ad4081e24bae8e9cd57ced0b182&oe=5B8306B7",
+      defaultValue: "https://scontent-atl3-1.xx.fbcdn.net/v/t31.0-8/906416_10103157316469369_986850834_o.jpg?_nc_cat=107&_nc_ht=scontent-atl3-1.xx&oh=58d0afe627c2ff41d44c96260d5827b2&oe=5C7054B7",
       validate: {
         isUrl: true
       }

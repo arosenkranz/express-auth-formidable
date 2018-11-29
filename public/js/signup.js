@@ -1,33 +1,23 @@
 $(document).ready(function () {
   // Getting references to our form and input
-  var signUpForm = $("form.signup");
-  var emailInput = $("input#email-input");
-  var passwordInput = $("input#password-input");
+  const $signUpForm = $("form.signup");
+  const $emailInput = $("input#email-input");
+  const $passwordInput = $("input#password-input");
 
   // When the signup button is clicked, we validate the email and password are not blank
-  signUpForm.on("submit", function (event) {
+  $signUpForm.on("submit", function (event) {
     event.preventDefault();
 
-    // Use FormData constructor to build a new multipart form (for handling images)
-    var formData = new FormData();
-    // append email to form (email: 'alex@alex.com')
-    formData.append("email", emailInput.val().trim());
-    // append password to form (password: '12345')
-    formData.append("password", passwordInput.val().trim());
-
-    if ($("#file-input").prop("files")[0]) {
-      // append photo information to form (photo: {objOfPhotoInfo})
-      formData.append("photo", $("#file-input").prop("files")[0], $("#file-input").prop("files")[0].name);
-    }
-    console.log($("#file-input").prop("files"));
-
-    // if (!userData.email || !userData.password) {
-    //   return;
-    // }
+    const formData = {
+      email: $emailInput.val().trim(),
+      password: $passwordInput.val().trim()
+    };
+    
     // If we have an email and password, run the signUpUser function
     signUpUser(formData);
-    emailInput.val("");
-    passwordInput.val("");
+    $emailInput.val("");
+    $passwordInput.val("");
+
   });
 
   // Does a post to the signup route. If successful, we are redirected to the members page
@@ -36,9 +26,6 @@ $(document).ready(function () {
     $.ajax({
       url: "/api/signup",
       data: formData,
-      cache: false,
-      contentType: false,
-      processData: false,
       method: 'POST',
     }).then(function (data) {
       console.log(data);
@@ -48,8 +35,9 @@ $(document).ready(function () {
   }
 
   function handleLoginErr(err) {
-    console.log(err);
-    $("#alert .msg").text(err);
+    console.log(err.responseJSON.errors[0].message);
+$("#alert .msg").text(err.responseJSON.errors[0].message);
     $("#alert").fadeIn(500);
   }
+
 });
